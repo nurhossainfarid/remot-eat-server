@@ -1,12 +1,24 @@
 {
   "name": "remot_eat",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "nurhossainfarid <faahsan1516@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^5.10.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.18.3",
-    "nodemon": "^3.1.0",
     "prisma": "^5.10.2"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "repository": "https://github.com/nurhossainfarid/remot-eat-server.git"
 }

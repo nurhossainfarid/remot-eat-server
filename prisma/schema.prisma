@@ -12,3 +12,115 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+// User model
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  address String
+  role Role @default(STUDENT)
+  status String
+  shop Shop[]
+  order_foods Order[]
+  profile Profile?
+  created_at DateTime @default(now())
+}
+
+// Shop model
+model Shop {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  shop_name String
+  shop_address String
+  shop_phone String
+  shop_image String
+  open_time String
+  close_time String
+  food_items FoodItems[]
+  food_package FoodPackage[]
+  order_foods Order[]
+  created_at DateTime @default(now())
+}
+
+// Single Food Items model
+model FoodItems {
+  id Int @id @default(autoincrement())
+  shop Shop @relation(fields: [shop_id], references: [id], onDelete: Cascade)
+  shop_id Int
+  food_name String
+  description String
+  price Int
+  quantity Int
+  food_image String
+  rating Float?
+  discount Float?
+  created_at DateTime @default(now())
+}
+
+// Package Food model
+model FoodPackage {
+  id Int @id @default(autoincrement())
+  shop Shop @relation(fields: [shop_id], references: [id], onDelete: Cascade)
+  shop_id Int
+  food_name String[] @default([])
+  description String
+  price Int
+  quantity String[] @default([])
+  food_image String[] @default([])
+  rating Float?
+  discount Float?
+  created_at DateTime @default(now())
+}
+
+// Order Food Model
+model Order {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  shop Shop @relation(fields: [shop_id], references: [id], onDelete: Cascade)
+  shop_id Int
+  food_items String[] @default([])
+  description String
+  total_price Int
+  order_status OrderStatus
+  payment_status PaymentStatus @default(CASH)
+  picked PickedOrder @default(YES)
+  created_at DateTime @default(now())
+}
+
+// Profile Model
+model Profile {
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String @unique
+  first_name String
+  second_name String
+  email String @unique
+  password String 
+  phone String 
+  profile_image String 
+}
+
+enum Role {
+  STUDENT
+  OWNER
+  SUPERADMIN
+}
+
+enum OrderStatus {
+  ACCEPTED
+  REJECTED
+}
+
+enum PaymentStatus {
+  CASH
+  ONLINE
+}
+
+enum PickedOrder {
+  YES
+  NO
+}
