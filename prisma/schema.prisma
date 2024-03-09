@@ -22,9 +22,9 @@ model User {
   password String
   address String
   role Role @default(STUDENT)
-  status String
-  shop Shop[]
-  order_foods Order[]
+  status AccountStatus @default(ACTIVE)
+  shop Shop?
+  order_foods Order?
   profile Profile?
   created_at DateTime @default(now())
 }
@@ -108,6 +108,12 @@ enum Role {
   STUDENT
   OWNER
   SUPERADMIN
+}
+
+enum AccountStatus {
+  ACTIVE
+  PENDING
+  BLOCKED
 }
 
 enum OrderStatus {
