@@ -44,6 +44,107 @@ export const registerUser = async (req, res) => {
     }
 }
 
+// Get all users
+export const getAllUser = async (req, res) => {
+    try {
+        const user = await prisma.user.findMany({});
+        return res.json({
+            status: 200,
+            data: user,
+            message: "All user successfully"
+        })  
+    } catch (error) {
+        res.status(400).json({
+            status: "Failed",
+            message: "User could not get successfully",
+            error: error.message
+        })
+    }
+}
+
+// Get user by id
+export const getUserById = async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                id: userId
+            }
+        })
+    
+        return res.json({
+            status: 200,
+            data: user,
+            message: "See user successfully"
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: "Failed",
+            message: "User could not read successfully",
+            error: error.message
+        })
+    }
+ 
+}
+
+// update user by id
+export const updateUser = async (req, res) => {
+    const userId = req.params.id;   
+    const { name, email, password, address, role, status } = req.body;
+
+    try {
+        const updateData = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                name,
+                email,
+                password,
+                address,
+                role,
+                status
+            }
+        })
+    
+        res.status(200).json({
+            status: 200,
+            data: updateData,
+            message: "Update user successfully"
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: "Failed",
+            message: "User could not update successfully",
+            error: error.message
+        })
+    }
+}
+
+// delete user by id
+export const deleteUser = async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        });
+    
+        return res.json({
+            status: 200,
+            message: 'user delete successfully'
+        })
+    } catch (error) {
+        res.status(400).json({
+            status: "Failed",
+            message: "User could not delete successfully",
+            error: error.message
+        })
+    }
+}
+
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -67,7 +168,7 @@ export const login = async (req, res) => {
             })
         };
 
-        if (findUser.status != "Active") {
+        if (findUser.status.toLowerCase() != "active") {
             return res.status(401).json({
                 status: "Failed",
                 error: "Your account is not active yet"

@@ -23,8 +23,8 @@ model User {
   address String
   role Role @default(STUDENT)
   status AccountStatus @default(ACTIVE)
-  shop Shop?
-  order_foods Order?
+  shop Shop[]
+  order_foods Order[]
   profile Profile?
   created_at DateTime @default(now())
 }
@@ -38,16 +38,16 @@ model Shop {
   shop_address String
   shop_phone String
   shop_image String
-  open_time String
-  close_time String
-  food_items FoodItems[]
-  food_package FoodPackage[]
+  open_time String?
+  close_time String?
+  food_items Food[]
+  food_package Foods[]
   order_foods Order[]
   created_at DateTime @default(now())
 }
 
 // Single Food Items model
-model FoodItems {
+model Food {
   id Int @id @default(autoincrement())
   shop Shop @relation(fields: [shop_id], references: [id], onDelete: Cascade)
   shop_id Int
@@ -62,7 +62,7 @@ model FoodItems {
 }
 
 // Package Food model
-model FoodPackage {
+model Foods {
   id Int @id @default(autoincrement())
   shop Shop @relation(fields: [shop_id], references: [id], onDelete: Cascade)
   shop_id Int
@@ -87,8 +87,8 @@ model Order {
   description String
   total_price Int
   order_status OrderStatus
-  payment_status PaymentStatus @default(CASH)
-  picked PickedOrder @default(YES)
+  payment_status PaymentStatus? @default(CASH)
+  picked PickedOrder? @default(YES)
   created_at DateTime @default(now())
 }
 
