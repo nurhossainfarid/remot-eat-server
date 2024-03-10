@@ -54,9 +54,9 @@ model Food {
   food_name String
   description String
   price Int
-  quantity Int
+  quantity String
   food_image String
-  rating Float?
+  rating Float? 
   discount Float?
   created_at DateTime @default(now())
 }
@@ -86,7 +86,7 @@ model Order {
   food_items String[] @default([])
   description String
   total_price Int
-  order_status OrderStatus
+  order_status OrderStatus? @default(PENDING)
   payment_status PaymentStatus? @default(CASH)
   picked PickedOrder? @default(YES)
   created_at DateTime @default(now())
@@ -110,16 +110,17 @@ enum Role {
   SUPERADMIN
 }
 
+enum OrderStatus {
+  ACCEPTED
+  PENDING
+  REJECTED
+}
+
 enum AccountStatus {
   ACTIVE
-  PENDING
   BLOCKED
 }
 
-enum OrderStatus {
-  ACCEPTED
-  REJECTED
-}
 
 enum PaymentStatus {
   CASH

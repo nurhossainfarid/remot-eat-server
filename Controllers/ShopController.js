@@ -63,7 +63,6 @@ export const getAllShop = async (req, res) => {
 
 // Get shop by id
 export const getShopById = async (req, res) => {
-    
     try {
         const shopId = req.params.id;
         const shop = await prisma.shop.findFirst({
@@ -89,7 +88,6 @@ export const getShopById = async (req, res) => {
 
 // update shop by id
 export const updateShop = async (req, res) => {
-    
     try {
         const shopId = req.params.id;   
         const { user_id, shop_name, shop_address, shop_phone, shop_image, open_time, 
@@ -127,21 +125,24 @@ export const updateShop = async (req, res) => {
 
 // delete shop by id
 export const deleteShop = async (req, res) => {
-    const shopId = req.params.id;
-    await prisma.shop.delete({
-        where: {
-            id: Number(shopId)
-        }
-    });
-
-    return res.json({
-        status: 200,
-        message: 'shop delete successfully'
-    })
-
     try {
+        const shopId = req.params.id;
+        await prisma.shop.delete({
+            where: {
+                id: Number(shopId)
+            }
+        });
+    
+        res.status(200).json({
+            status: 'success',
+            message: 'shop delete successfully'
+        })
         
     } catch (error) {
-        
+        res.status(400).json({
+            status: "Failed",
+            message: "Shop could not add successfully",
+            error: error.message
+        })
     }
 }
